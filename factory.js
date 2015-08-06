@@ -12,10 +12,10 @@ module.exports = {
     protractor: function () {
         return {
             backendDriver: function () {
-                return BackendDriver;
+                return BackendDriver();
             },
             wait: function () {
-                return Wait;
+                return Wait();
             }
         }
     },
