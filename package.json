@@ -1,0 +1,29 @@
+{
+  "name": "e2e-testing-services",
+  "version": "0.0.1",
+  "description": "Grunt middleware and protractor high level services for e2e testing",
+  "author": {
+    "name": "Marcin Jurkowski",
+    "email": "mjurkowski@qmetric.co.uk"
+  },
+  "contributors": [
+    {
+      "name": "Ismael Perez",
+      "url": "iperez@qmetric.co.uk"
+    }
+  ],
+  "main": "./factory.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qmg-marcin/e2e-testing-services.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "dependencies": {
+    "q": "latest",
+    "underscore": "latest"
+  }
+}
