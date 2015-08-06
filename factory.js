@@ -11,10 +11,10 @@ module.exports = {
     protractor: function () {
         return {
             backendDriver: function () {
-                return new BackendDriver();
+                return BackendDriver;
             },
             wait: function () {
-                return new Wait();
+                return Wait;
             }
         }
     },
