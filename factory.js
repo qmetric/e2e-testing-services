@@ -34,7 +34,7 @@ module.exports = {
                 return cleanGetParameters;
             },
             handleNonGetRequests: function () {
-                return HandleNonGetRequests;
+                return handleNonGetRequests;
             }
         }
     }
