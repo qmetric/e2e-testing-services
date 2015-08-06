@@ -2,7 +2,7 @@
 
 var requestReader = require('./requestReader');
 
-var createOverrideMiddleware = function () {
+var overridePathOnce = function () {
     var overrides = {};
     var overridePathOnce = function(request, response, next) {
         var uri = url.parse(request.url).pathname;
@@ -26,6 +26,4 @@ var createOverrideMiddleware = function () {
     return overridePathOnce;
 };
 
-module.exports = {
-    overridePathOnce: createOverrideMiddleware
-};
+module.exports = overridePathOnce;

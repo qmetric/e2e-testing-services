@@ -41,6 +41,6 @@ var BackendDriver = function () {
             });
         }
     };
-}
+};
 
 module.exports = BackendDriver;
