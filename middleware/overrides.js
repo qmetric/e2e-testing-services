@@ -1,6 +1,7 @@
 'use strict';
 
 var requestReader = require('./requestReader');
+var url = require('url');
 
 var overridePathOnce = function () {
     var overrides = {};
