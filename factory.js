@@ -2,7 +2,7 @@
 
 var overrides = require('./middleware/overrides');
 var cleanGetParameters = require('./middleware/cleanGetParameters');
-var RequestExpectations = require('./middleware/requestExpectations');
+var requestExpectations = require('./middleware/requestExpectations');
 var RequestReader = require('./middleware/requestReader');
 var handleNonGetRequests = require('./middleware/handleNonGetRequests');
 var BackendDriver = require('./protractor/BackendDriver');
@@ -27,14 +27,14 @@ module.exports = {
             requestReader: function () {
                 return RequestReader;
             },
-            requestExpectations: function () {
-                return RequestExpectations();
+            requestExpectations: function (grunt) {
+                return requestExpectations()(grunt);
             },
             cleanGetParameters: function () {
                 return cleanGetParameters;
             },
-            handleNonGetRequests: function () {
-                return handleNonGetRequests;
+            handleNonGetRequests: function (grunt) {
+                return handleNonGetRequests(grunt);
             }
         }
     }
