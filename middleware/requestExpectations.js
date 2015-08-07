@@ -82,7 +82,7 @@ var expectNextRequestMiddleware = function () {
             }
 
             if (expectedNextRequestBody) {
-                isNextRequestExpected(request)
+                return isNextRequestExpected(request)
                     .then(function() {
                         next();
                     })
