@@ -1,9 +1,12 @@
 /* global browser, protractor, element, by */
 'use strict';
 
-var attributeOf = function(elementFinder, attributeName, expectedValue) {
+var attributeOf = function(elementFinder, attributeName, expectedValue, attributeValueParser) {
     return function() {
         return elementFinder.getAttribute(attributeName).then(function(value) {
+            if(attributeValueParser) {
+                value = attributeValueParser(value);
+            }
             return value === expectedValue;
         });
     };
@@ -29,9 +32,9 @@ var Wait = function () {
             var timeToWait = time || 3000;
             return browser.wait(ExpectedConditions.textToBePresentInElement(elementFinder, expectedContents), timeToWait, 'Timed out while waiting for ' + elementFinder.locator().value + ' content change');
         },
-        forElementAttributeToBe: function(elementFinder, attributeName, expectedValue, time) {
+        forElementAttributeToBe: function(elementFinder, attributeName, expectedValue, attributeValueParser, time) {
             var timeToWait = time || 3000;
-            return browser.wait(attributeOf(elementFinder, attributeName, expectedValue), timeToWait, 'Timed out while waiting for ' + elementFinder.locator().value + ' attribute ' + attributeName + ' change');
+            return browser.wait(attributeOf(elementFinder, attributeName, expectedValue, attributeValueParser), timeToWait, 'Timed out while waiting for ' + elementFinder.locator().value + ' attribute ' + attributeName + ' change');
         }
     };
 };
