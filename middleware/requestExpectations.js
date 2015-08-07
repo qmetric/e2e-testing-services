@@ -7,7 +7,7 @@ var _ = require('underscore');
 var expectNextRequestMiddleware = function () {
     var grunt = null;
 
-    var expectedNextRequest = null;
+    var expectedNextRequestBody = null;
     var expectedPartOfNextUrl = null;
 
     var prepareForNextRequest = function(request) {
@@ -16,7 +16,7 @@ var expectNextRequestMiddleware = function () {
             if(!requestBody) {
                 return deferredPreparation.reject('The request payload cant be empty');
             }
-            expectedNextRequest = requestBody;
+            expectedNextRequestBody = requestBody;
             deferredPreparation.resolve();
         });
         return deferredPreparation.promise;
@@ -26,7 +26,7 @@ var expectNextRequestMiddleware = function () {
         var deferredCheck = Q.defer();
 
         requestReader.readRequestBody(request).then(function(requestBody) {
-            var isBodyExpected = _.isEqual(expectedNextRequest, requestBody);
+            var isBodyExpected = _.isEqual(expectedNextRequestBody, requestBody);
             if(isBodyExpected) {
                 deferredCheck.resolve();
             } else {
@@ -69,8 +69,6 @@ var expectNextRequestMiddleware = function () {
                 response.end();
             };
 
-            var filePath = '.' + request.url;
-
             if (request.url === '/expect-next-request-body') {
                 return prepareForNextRequest(request).then(returnWithSuccess, returnWithError);
             }
@@ -83,18 +81,14 @@ var expectNextRequestMiddleware = function () {
                 return returnWithError();
             }
 
-            if (expectedNextRequest) {
+            if (expectedNextRequestBody) {
                 isNextRequestExpected(request)
                     .then(function() {
-                        if (grunt.file.exists(filePath)) {
-                            return response.end(grunt.file.read(filePath));
-                        } else {
-                            next();
-                        }
+                        next();
                     })
                     .catch(returnWithError)
                     .fin(function() {
-                        expectedNextRequest = null;
+                        expectedNextRequestBody = null;
                     });
             } else {
                 next();

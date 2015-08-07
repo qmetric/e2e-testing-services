@@ -19,7 +19,7 @@ var BackendDriver = function () {
     return {
         sendPostRequest: sendPostRequest,
         expectNextRequestBodyToEqual: function(expectedBody) {
-            return sendPostRequest('/expect-next-request', expectedBody, function() {
+            return sendPostRequest('/expect-next-request-body', expectedBody, function() {
                 console.error('expectNextRequestBodyToEqual has failed');
             });
         },
