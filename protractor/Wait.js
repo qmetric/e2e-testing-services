@@ -35,6 +35,10 @@ var Wait = function () {
         forElementAttributeToBe: function(elementFinder, attributeName, expectedValue, attributeValueParser, time) {
             var timeToWait = time || 3000;
             return browser.wait(attributeOf(elementFinder, attributeName, expectedValue, attributeValueParser), timeToWait, 'Timed out while waiting for ' + elementFinder.locator().value + ' attribute ' + attributeName + ' change');
+        },
+        forStalenessOf: function(elementFinder, time) {
+            var timeToWait = time || 3000;
+            return browser.wait(protractor.ExpectedConditions.stalenessOf(elementFinder), timeToWait, 'Timed out while waiting for ' + locator.toString() + ' to be stale');
         }
     };
 };
