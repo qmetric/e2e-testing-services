@@ -7,8 +7,6 @@ module.exports = function(grunt) {
 
             if(grunt.file.exists(filePath)) {
                 return response.end(grunt.file.read(filePath));
-            } else {
-                next();
             }
         }
         next();
