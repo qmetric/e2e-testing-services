@@ -19,7 +19,7 @@ var Wait = function () {
         },
         forElementContentsToBe: function(elementFinder, expectedContents, time) {
             var timeToWait = time || 3000;
-            return browser.wait(ExpectedConditions.textToBePresentInElementValue(elementFinder, expectedContents), timeToWait, 'Timed out while waiting for ' + elementFinder.locator().value + ' value change');
+            return browser.wait(ExpectedConditions.textToBePresentInElement(elementFinder, expectedContents), timeToWait, 'Timed out while waiting for ' + elementFinder.locator().value + ' content change');
         }
     };
 };
