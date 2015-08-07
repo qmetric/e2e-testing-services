@@ -8,7 +8,7 @@ var expectNextRequestMiddleware = function () {
     var grunt = null;
 
     var expectedNextRequest = null;
-    var expectedNextRequestUrl = null;
+    var expectedPartOfNextUrl = null;
 
     var prepareForNextRequest = function(request) {
         var deferredPreparation = Q.defer();
@@ -38,17 +38,20 @@ var expectNextRequestMiddleware = function () {
     };
 
     var prepareForNextRequestUrl = function(request) {
+        var deferredPreparation = Q.defer();
         requestReader.readRequestBody(request).then(function(requestBody) {
             if(!requestBody.expectedPartOfNextUrl) {
-                throw new Error('The request has to contain "expectedPartOfNextUrl" field.');
+                return deferredPreparation.reject('The request has to contain "expectedPartOfNextUrl" field.');
             }
-            expectedNextRequestUrl = requestBody.expectedPartOfNextUrl;
+            expectedPartOfNextUrl = requestBody.expectedPartOfNextUrl;
+            deferredPreparation.resolve();
         });
+        return deferredPreparation.promise;
     };
 
     var isNextUrlExpected = function(url) {
-        var wasGivenUrlExpected = url.indexOf(expectedNextRequestUrl) > -1;
-        expectedNextRequestUrl = null;
+        var wasGivenUrlExpected = url.indexOf(expectedPartOfNextUrl) > -1;
+        expectedPartOfNextUrl = null;
         return wasGivenUrlExpected;
     };
 
@@ -68,25 +71,23 @@ var expectNextRequestMiddleware = function () {
 
             var filePath = '.' + request.url;
 
-            if (request.url.indexOf('expect-next-request-body') > -1) {
-                return prepareForNextRequest(request).then(function() {
-                    returnWithSuccess();
-                }, returnWithError);
+            if (request.url === '/expect-next-request-body') {
+                return prepareForNextRequest(request).then(returnWithSuccess, returnWithError);
             }
 
-            if (request.url.indexOf('expect-next-request-url-contains') > -1) {
-                prepareForNextRequestUrl(request);
+            if (request.url === '/expect-next-request-url-contains') {
+                return prepareForNextRequestUrl(request).then(returnWithSuccess, returnWithError);
             }
 
-            if (expectedNextRequestUrl && !isNextUrlExpected(request.url)) {
-                return next();
+            if (expectedPartOfNextUrl && !isNextUrlExpected(request.url)) {
+                return returnWithError();
             }
 
             if (expectedNextRequest) {
                 isNextRequestExpected(request)
                     .then(function() {
                         if (grunt.file.exists(filePath)) {
-                            response.end(grunt.file.read(filePath));
+                            return response.end(grunt.file.read(filePath));
                         } else {
                             next();
                         }
