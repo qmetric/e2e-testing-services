@@ -39,10 +39,10 @@ var expectNextRequestMiddleware = function () {
 
     var prepareForNextRequestUrl = function(request) {
         requestReader.readRequestBody(request).then(function(requestBody) {
-            if(!requestBody.expectedNextUrl) {
-                throw new Error('The request has to contain "expectedNextUrl" field.');
+            if(!requestBody.expectedPartOfNextUrl) {
+                throw new Error('The request has to contain "expectedPartOfNextUrl" field.');
             }
-            expectedNextRequestUrl = requestBody.expectedNextUrl;
+            expectedNextRequestUrl = requestBody.expectedPartOfNextUrl;
         });
     };
 

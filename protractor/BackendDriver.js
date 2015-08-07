@@ -13,30 +13,26 @@ var BackendDriver = function () {
                 }
             };
             xhr.send(payload);
-        }, url, payload).then(null, errorHandler);
+        }, url, JSON.stringify(payload)).then(null, errorHandler);
     };
 
     return {
-        expectNextDocumentActionToBeMTA: function() {
-            return sendPostRequest('/service/policy/expect-next-request-url-contains', '{ "expectedNextUrl": "mta" }', function() {
-                console.error('expectNextDocumentActionToBeMTA has failed');
-            });
-        },
-        expectNextDocumentActionToBePurchase: function() {
-            return sendPostRequest('/service/policy/expect-next-request-url-contains', '{ "expectedNextUrl": "purchase" }', function() {
-                console.error('expectNextDocumentActionToBePurchase has failed');
-            });
-        },
+        sendPostRequest: sendPostRequest,
         expectNextRequestBodyToEqual: function(expectedBody) {
-            return sendPostRequest('/expect-next-request', JSON.stringify(expectedBody), function() {
+            return sendPostRequest('/expect-next-request', expectedBody, function() {
                 console.error('expectNextRequestBodyToEqual has failed');
             });
         },
+        expectNextRequestUrlToContain: function(expectedPartOfNextUrl) {
+            return sendPostRequest('/expect-next-request-url-contains', { expectedPartOfNextUrl: expectedPartOfNextUrl }, function() {
+                console.error('expectNextRequestUrlToContain has failed');
+            });
+        },
         overridePath: function(from, to) {
-            return sendPostRequest('/override', JSON.stringify({
+            return sendPostRequest('/override', {
                 from: from,
                 to: to
-            }), function() {
+            }, function() {
                 console.error('overridePath has failed');
             });
         }
